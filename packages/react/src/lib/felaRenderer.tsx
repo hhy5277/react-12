@@ -11,7 +11,7 @@ import * as perf from 'src/lib/perf'
 let felaDevMode = false
 
 try {
-  felaDevMode = !!window.localStorage.felaDevMode
+  felaDevMode = perf.flags.FELA_RENDERER_DEV_MODE
 } catch {}
 
 if (process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'test') {
@@ -47,11 +47,11 @@ const createRendererConfig = (options: any = {}) => ({
   plugins: perf.flags.SKIP_FELA_PLUGINS
     ? []
     : [
-      // is necessary to prevent accidental style typos
-      // from breaking ALL the styles on the page
-      felaSanitizeCss({
-        skip: ['content'],
-      }),
+        // is necessary to prevent accidental style typos
+        // from breaking ALL the styles on the page
+        felaSanitizeCss({
+          skip: ['content'],
+        }),
 
         felaPluginPlaceholderPrefixer(),
         felaPluginPrefixer(),
