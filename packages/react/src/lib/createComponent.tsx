@@ -1,11 +1,15 @@
 import * as React from 'react'
 import * as _ from 'lodash'
+// @ts-ignore
+import { ThemeContext } from 'react-fela'
 
 import renderComponent, { RenderResultConfig } from './renderComponent'
 import { AccessibilityActionHandlers } from './accessibility/types'
 import { FocusZone } from './accessibility/FocusZone'
 import { createShorthandFactory } from './factories'
 import { ObjectOf } from '../types'
+import { ThemePrepared } from '../themes/types'
+import * as perf from 'src/lib/perf'
 
 export interface CreateComponentConfig<P> {
   displayName: string
@@ -40,17 +44,23 @@ const createComponent = <P extends ObjectOf<any> = any>({
   }
 
   const StardustComponent: CreateComponentReturnType<P> = (props): React.ReactElement<P> => {
-    return renderComponent({
-      className,
-      defaultProps,
-      displayName,
-      handledProps: _.keys(propTypes).concat(handledProps),
-      props,
-      state: {},
-      actionHandlers,
-      focusZoneRef,
-      render: config => render(config, props),
-    })
+    // @ts-ignore
+    const theme: ThemePrepared = perf.flags.SKIP_CONTEXT ? {} : React.useContext(ThemeContext)
+
+    return renderComponent(
+      {
+        className,
+        defaultProps,
+        displayName,
+        handledProps: _.keys(propTypes).concat(handledProps),
+        props,
+        state: {},
+        actionHandlers,
+        focusZoneRef,
+        render: config => render(config, props),
+      },
+      theme,
+    )
   }
 
   StardustComponent.create = createShorthandFactory({

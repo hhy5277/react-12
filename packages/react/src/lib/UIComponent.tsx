@@ -1,9 +1,13 @@
 import * as React from 'react'
 import * as _ from 'lodash'
+// @ts-ignore
+import { ThemeContext } from 'react-fela'
+
 import renderComponent, { RenderResultConfig } from './renderComponent'
 import { AccessibilityActionHandlers } from './accessibility/types'
 import { FocusZone } from './accessibility/FocusZone'
 import { isBrowser } from 'src/lib'
+import * as perf from 'src/lib/perf'
 
 // TODO @Bugaa92: deprecated by createComponent.tsx
 class UIComponent<P, S = {}> extends React.Component<P, S> {
@@ -13,6 +17,7 @@ class UIComponent<P, S = {}> extends React.Component<P, S> {
   static className: string
 
   static propTypes: any
+  static contextType = ThemeContext
 
   /** Array of props to exclude from list of handled ones. */
   static unhandledProps: string[] = []
@@ -54,17 +59,20 @@ class UIComponent<P, S = {}> extends React.Component<P, S> {
   }
 
   render() {
-    return renderComponent({
-      className: this.childClass.className,
-      defaultProps: this.childClass.defaultProps,
-      displayName: this.childClass.displayName,
-      handledProps: this.childClass.handledProps,
-      props: this.props,
-      state: this.state,
-      actionHandlers: this.actionHandlers,
-      focusZoneRef: this.setFocusZoneRef,
-      render: this.renderComponent,
-    })
+    return renderComponent(
+      {
+        className: this.childClass.className,
+        defaultProps: this.childClass.defaultProps,
+        displayName: this.childClass.displayName,
+        handledProps: this.childClass.handledProps,
+        props: this.props,
+        state: this.state,
+        actionHandlers: this.actionHandlers,
+        focusZoneRef: this.setFocusZoneRef,
+        render: this.renderComponent,
+      },
+      perf.flags.SKIP_CONTEXT ? {} : this.context,
+    )
   }
 
   private setFocusZoneRef = (focusZone: FocusZone): void => {

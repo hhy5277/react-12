@@ -1,7 +1,6 @@
 import cx from 'classnames'
 import * as React from 'react'
 import * as _ from 'lodash'
-import { FelaTheme } from 'react-fela'
 
 import callable from './callable'
 import felaRenderer from './felaRenderer'
@@ -134,7 +133,7 @@ const renderWithFocusZone = <P extends {}>(
 
 const renderComponent = perf.time(
   'renderComponent',
-  <P extends {}>(config: RenderConfig<P>): React.ReactElement<P> => {
+  <P extends {}>(config: RenderConfig<P>, theme: ThemePrepared): React.ReactElement<P> => {
     const {
       className,
       defaultProps,
@@ -147,97 +146,93 @@ const renderComponent = perf.time(
       render,
     } = config
 
-    const childFunc = (theme: ThemePrepared) => {
-      if (_.isEmpty(theme)) {
-        logProviderMissingWarning()
-      }
-
-      const {
-        siteVariables = {
-          colorScheme: {},
-          colors: {},
-          contextualColors: {},
-          emphasisColors: {},
-          naturalColors: {},
-          fontSizes: {},
-        },
-        componentVariables = {},
-        componentStyles = {},
-        rtl = false,
-        renderer = felaRenderer,
-      } = theme || {}
-      const ElementType = getElementType({ defaultProps }, props) as React.ReactType<P>
-
-      const stateAndProps = { ...state, ...props }
-
-      // Resolve variables for this component, allow props.variables to override
-      const resolvedVariables: ComponentVariablesObject = mergeComponentVariables(
-        componentVariables[displayName],
-        props.variables,
-      )(siteVariables)
-
-      const animationCSSProp = props.animation ? createAnimationStyles(props.animation, theme) : {}
-
-      // Resolve styles using resolved variables, merge results, allow props.styles to override
-      const mergedStyles: ComponentSlotStylesPrepared = mergeComponentStyles(
-        componentStyles[displayName],
-        {
-          root: props.styles,
-        },
-      )
-
-      const accessibility: AccessibilityBehavior = getAccessibility(
-        stateAndProps,
-        actionHandlers,
-        rtl,
-      )
-
-      const unhandledProps = getUnhandledProps({ handledProps }, props)
-
-      const colors = generateColorScheme(stateAndProps.color, resolvedVariables.colorScheme)
-
-      const styleParam: ComponentStyleFunctionParam = {
-        props: stateAndProps,
-        variables: resolvedVariables,
-        theme,
-        colors,
-      }
-
-      mergedStyles.root = {
-        ...callable(mergedStyles.root)(styleParam),
-        ...animationCSSProp,
-      }
-
-      const resolvedStyles: ComponentSlotStylesPrepared = Object.keys(mergedStyles).reduce(
-        (acc, next) => ({ ...acc, [next]: callable(mergedStyles[next])(styleParam) }),
-        {},
-      )
-
-      const classes: ComponentSlotClasses = getClasses(renderer, mergedStyles, styleParam)
-      classes.root = cx(className, classes.root, props.className)
-
-      const config: RenderResultConfig<P> = {
-        ElementType,
-        unhandledProps,
-        classes,
-        variables: resolvedVariables,
-        styles: resolvedStyles,
-        accessibility,
-        rtl,
-        theme,
-      }
-
-      if (!perf.flags.SKIP_FOCUS_ZONE) {
-        if (accessibility.focusZone) {
-          return renderWithFocusZone(render, accessibility.focusZone, config, focusZoneRef)
-        }
-      }
-
-      return render(config)
+    if (_.isEmpty(theme)) {
+      logProviderMissingWarning()
     }
 
-    if (perf.flags.SKIP_CONTEXT) {
-      return childFunc({} as any)
+    const {
+      siteVariables = {
+        colorScheme: {},
+        colors: {},
+        contextualColors: {},
+        emphasisColors: {},
+        naturalColors: {},
+        fontSizes: {},
+      },
+      componentVariables = {},
+      componentStyles = {},
+      rtl = false,
+      renderer = felaRenderer,
+    } = theme || {}
+    const ElementType = getElementType({ defaultProps }, props) as React.ReactType<P>
+
+    const stateAndProps = { ...state, ...props }
+
+    // Resolve variables for this component, allow props.variables to override
+    const resolvedVariables: ComponentVariablesObject = mergeComponentVariables(
+      componentVariables[displayName],
+      props.variables,
+    )(siteVariables)
+
+    const animationCSSProp = props.animation ? createAnimationStyles(props.animation, theme) : {}
+
+    // Resolve styles using resolved variables, merge results, allow props.styles to override
+    const mergedStyles: ComponentSlotStylesPrepared = mergeComponentStyles(
+      componentStyles[displayName],
+      {
+        root: props.styles,
+      },
+    )
+
+    const accessibility: AccessibilityBehavior = getAccessibility(
+      stateAndProps,
+      actionHandlers,
+      rtl,
+    )
+
+    const unhandledProps = getUnhandledProps({ handledProps }, props)
+
+    const colors = generateColorScheme(stateAndProps.color, resolvedVariables.colorScheme)
+
+    const styleParam: ComponentStyleFunctionParam = {
+      props: stateAndProps,
+      variables: resolvedVariables,
+      theme,
+      colors,
     }
+
+    mergedStyles.root = {
+      ...callable(mergedStyles.root)(styleParam),
+      ...animationCSSProp,
+    }
+
+    const resolvedStyles: ComponentSlotStylesPrepared = Object.keys(mergedStyles).reduce(
+      (acc, next) => ({ ...acc, [next]: callable(mergedStyles[next])(styleParam) }),
+      {},
+    )
+
+    const classes: ComponentSlotClasses = getClasses(renderer, mergedStyles, styleParam)
+    classes.root = cx(className, classes.root, props.className)
+
+    const resultConfig: RenderResultConfig<P> = {
+      ElementType,
+      unhandledProps,
+      classes,
+      variables: resolvedVariables,
+      styles: resolvedStyles,
+      accessibility,
+      rtl,
+      theme,
+    }
+
+    if (!perf.flags.SKIP_FOCUS_ZONE) {
+      if (accessibility.focusZone) {
+        return renderWithFocusZone(render, accessibility.focusZone, resultConfig, focusZoneRef)
+      }
+    }
+
+    return render(resultConfig)
+  },
+)
 
 export default renderComponent
