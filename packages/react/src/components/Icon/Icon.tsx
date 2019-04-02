@@ -1,10 +1,10 @@
+import * as customPropTypes from '@stardust-ui/react-proptypes'
 import * as React from 'react'
 import * as PropTypes from 'prop-types'
 import {
   callable,
   UIComponent,
   createShorthandFactory,
-  customPropTypes,
   UIComponentProps,
   commonPropTypes,
   ColorComponentProps,
@@ -126,6 +126,6 @@ class Icon extends UIComponent<ReactProps<IconProps>, any> {
   }
 }
 
-Icon.create = createShorthandFactory(Icon, 'name')
+Icon.create = createShorthandFactory({ Component: Icon, mappedProp: 'name' })
 
 export default Icon

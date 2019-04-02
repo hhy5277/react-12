@@ -171,23 +171,28 @@ export const mergeThemeStyles = perf.time(
     }, initial)
   },
 )
-export const mergeRTL = perf.time('mergeRTL', (target, ...sources) => {
-  return !!sources.reduce((acc, next) => {
+
+export const mergeRTL = (target, ...sources) => {
+  return sources.reduce((acc, next) => {
     return typeof next === 'boolean' ? next : acc
   }, target)
-})
+}
+
 export const mergeFontFaces = perf.time('mergeFontFaces', (...sources: FontFace[]) => {
   return toCompactArray<FontFace>(...sources)
 })
+
 export const mergeStaticStyles = perf.time('mergeStaticStyles', (...sources: StaticStyle[]) => {
   return toCompactArray<StaticStyle>(...sources)
 })
+
 export const mergeIcons = perf.time(
   'mergeIcons',
   (target: ThemeIcons, ...sources: ThemeIcons[]): ThemeIcons => {
     return Object.assign(target, ...sources)
   },
 )
+
 export const mergeAnimations = perf.time(
   'mergeAnimations',
   (
@@ -204,6 +209,7 @@ export const mergeStyles = perf.time('mergeStyles', (...sources: ComponentSlotSt
     }, {})
   }
 })
+
 const mergeThemes = perf.time(
   'mergeThemes',
   (...themes: ThemeInput[]): ThemePrepared => {
@@ -226,11 +232,14 @@ const mergeThemes = perf.time(
 
       acc.componentStyles = mergeThemeStyles(acc.componentStyles, next.componentStyles)
 
-      // Merge icons set, last one wins in case of collisions
-      acc.icons = mergeIcons(acc.icons, next.icons)
+    // Merge icons set, last one wins in case of collisions
+    acc.icons = mergeIcons(acc.icons, next.icons)
 
       // Latest RTL value wins
-      acc.rtl = mergeRTL(acc.rtl, next.rtl)
+      const mergedRTL = mergeRTL(acc.rtl, next.rtl)
+      if (typeof mergedRTL === 'boolean') {
+        acc.rtl = mergedRTL
+      }
 
       // Use the correct renderer for RTL
       acc.renderer = acc.rtl ? felaRtlRenderer : felaRenderer

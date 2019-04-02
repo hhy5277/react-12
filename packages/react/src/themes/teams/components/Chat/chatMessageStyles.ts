@@ -61,6 +61,20 @@ const chatMessageStyles: ComponentSlotStylesInput<
         width: 'auto',
       },
     },
+    ...(p.attached === true && {
+      [p.mine ? 'borderTopRightRadius' : 'borderTopLeftRadius']: 0,
+      [p.mine ? 'borderBottomRightRadius' : 'borderBottomLeftRadius']: 0,
+      paddingTop: pxToRem(5),
+      paddingBottom: pxToRem(7),
+    }),
+    ...(p.attached === 'top' && {
+      [p.mine ? 'borderBottomRightRadius' : 'borderBottomLeftRadius']: 0,
+    }),
+    ...(p.attached === 'bottom' && {
+      [p.mine ? 'borderTopRightRadius' : 'borderTopLeftRadius']: 0,
+      paddingTop: pxToRem(5),
+      paddingBottom: pxToRem(7),
+    }),
   }),
 
   actionMenu: ({ props: p, variables: v }): ICSSInJSStyle => ({
@@ -78,14 +92,20 @@ const chatMessageStyles: ComponentSlotStylesInput<
   }),
 
   author: ({ props: p, variables: v }): ICSSInJSStyle => ({
-    ...(p.mine && screenReaderContainerStyles),
+    ...((p.mine || p.attached === 'bottom' || p.attached === true) && screenReaderContainerStyles),
     marginRight: v.authorMarginRight,
     marginBottom: v.headerMarginBottom,
     fontWeight: v.authorFontWeight,
   }),
 
-  timestamp: ({ variables: v }) => ({
+  timestamp: ({ props: p, variables: v }) => ({
     marginBottom: v.headerMarginBottom,
+    ...(p.mine && {
+      color: v.timestampColorMine,
+    }),
+    ...((p.attached === 'bottom' || p.attached === true) &&
+      !p.reactionGroup &&
+      screenReaderContainerStyles),
   }),
 
   content: ({ props: p, variables: v }): ICSSInJSStyle => ({

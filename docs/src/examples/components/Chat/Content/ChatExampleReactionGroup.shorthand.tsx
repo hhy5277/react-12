@@ -10,7 +10,7 @@ const items = [
     message: {
       content: (
         <Chat.Message
-          reactionGroup={{ items: reactions }}
+          reactionGroup={reactions}
           content="Hello"
           author="John Doe"
           timestamp="Yesterday, 10:15 PM"
@@ -27,8 +27,7 @@ const items = [
     message: {
       content: (
         <Chat.Message
-          reactionGroup={{ items: [{ icon: 'thumbs up', content: '8' }] }}
-          reactionGroupPosition={'end'}
+          reactionGroup={[{ icon: 'thumbs up', content: '8' }]}
           content="I'm back!"
           author="John Doe"
           timestamp="Yesterday, 10:15 PM"
@@ -42,7 +41,7 @@ const items = [
     message: {
       content: (
         <Chat.Message
-          reactionGroup={{ items: reactions }}
+          reactionGroup={reactions}
           content="Hi"
           author="Jane Doe"
           timestamp="Yesterday, 10:15 PM"

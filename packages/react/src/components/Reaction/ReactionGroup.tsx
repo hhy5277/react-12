@@ -1,3 +1,4 @@
+import * as customPropTypes from '@stardust-ui/react-proptypes'
 import * as React from 'react'
 import * as _ from 'lodash'
 
@@ -5,7 +6,6 @@ import { ReactProps, ShorthandValue } from '../../types'
 import {
   UIComponent,
   childrenExist,
-  customPropTypes,
   UIComponentProps,
   ChildrenComponentProps,
   ContentComponentProps,
@@ -85,6 +85,10 @@ class ReactionGroup extends UIComponent<ReactProps<ReactionGroupProps>> {
   }
 }
 
-ReactionGroup.create = createShorthandFactory(ReactionGroup, 'content')
+ReactionGroup.create = createShorthandFactory({
+  Component: ReactionGroup,
+  mappedProp: 'content',
+  mappedArrayProp: 'items',
+})
 
 export default ReactionGroup

@@ -5,6 +5,7 @@ import add from './add'
 import addParticipant from './addParticipant'
 import arrowUp from './arrowUp'
 import arrowDown from './arrowDown'
+import ban from './ban'
 import bold from './bold'
 import bookmark from './bookmark'
 import bullets from './bullets'
@@ -13,6 +14,7 @@ import call from './call'
 import callControlPresentNew from './callControlPresentNew'
 import callControlStopPresentingNew from './callControlStopPresentingNew'
 import callEnd from './callEnd'
+import callPstn from './callPstn'
 import callRecording from './callRecording'
 import callVideo from './callVideo'
 import callVideoOff from './callVideoOff'
@@ -21,11 +23,35 @@ import chat from './chat'
 import chevronDown from './chevronDown'
 import close from './close'
 import codeSnippet from './codeSnippet'
+import filesAftereffects from './filesAftereffects'
+import filesCode from './filesCode'
+import filesEmpty from './filesEmpty'
+import filesFlash from './filesFlash'
+import filesGif from './filesGif'
+import filesIllustrator from './filesIllustrator'
+import filesImage from './filesImage'
+import filesIndesign from './filesIndesign'
+import filesPdf from './filesPdf'
+import filesPhotoshop from './filesPhotoshop'
+import filesSketch from './filesSketch'
+import filesSound from './filesSound'
+import filesTxt from './filesTxt'
+import filesZip from './filesZip'
+import flag from './flag'
 import download from './download'
 import edit from './edit'
 import email from './email'
 import emoji from './emoji'
 import error from './error'
+import exclamationCircle from './exclamationCircle'
+import filesExcel from './filesExcel'
+import filesExcelBrand from './filesExcelBrand'
+import filesOneNote from './filesOneNote'
+import filesOneNoteBrand from './filesOneNoteBrand'
+import filesPowerPoint from './filesPowerPoint'
+import filesPowerPointBrand from './filesPowerPointBrand'
+import filesWord from './filesWord'
+import filesWordBrand from './filesWordBrand'
 import fontColor from './fontColor'
 import fontSize from './fontSize'
 import format from './format'
@@ -57,6 +83,7 @@ import redo from './redo'
 import removeFormat from './removeFormat'
 import reply from './reply'
 import retry from './retry'
+import skypeLogo from './skypeLogo'
 import search from './search'
 import send from './send'
 import settings from './settings'
@@ -72,6 +99,7 @@ import translation from './translation'
 import trashCan from './trashCan'
 import triangleDown from './triangleDown'
 import triangleRight from './triangleRight'
+import triangleUp from './triangleUp'
 import underline from './underline'
 import undo from './undo'
 import urgent from './urgent'
@@ -82,6 +110,7 @@ export default {
   add,
   'arrow-up': arrowUp,
   'arrow-down': arrowDown,
+  ban,
   bold,
   bookmark,
   bullets,
@@ -92,17 +121,34 @@ export default {
   'call-video-off': callVideoOff,
   'call-control-present-new': callControlPresentNew,
   'call-control-stop-presenting-new': callControlStopPresentingNew,
+  'call-pstn': callPstn,
   'call-recording': callRecording,
   'canvas-add-page': canvasAddPage,
   chat,
   'chevron-down': chevronDown,
   close,
   'code-snippet': codeSnippet,
+  'files-aftereffects': filesAftereffects,
+  'files-code': filesCode,
+  'files-empty': filesEmpty,
+  'files-flash': filesFlash,
+  'files-gif': filesGif,
+  'files-illustrator': filesIllustrator,
+  'files-image': filesImage,
+  'files-indesign': filesIndesign,
+  'files-pdf': filesPdf,
+  'files-photoshop': filesPhotoshop,
+  'files-sketch': filesSketch,
+  'files-sound': filesSound,
+  'files-txt': filesTxt,
+  'files-zip': filesZip,
+  flag,
   download,
   edit,
   email,
   emoji,
   error,
+  'exclamation-circle': exclamationCircle,
   format,
   'font-color': fontColor,
   'font-size': fontSize,
@@ -135,6 +181,7 @@ export default {
   'remove-format': removeFormat,
   reply,
   retry,
+  'skype-logo': skypeLogo,
   search,
   send,
   settings,
@@ -149,9 +196,21 @@ export default {
   'trash-can': trashCan,
   'triangle-down': triangleDown,
   'triangle-right': triangleRight,
+  'triangle-up': triangleUp,
   'team-create': teamCreate,
   underline,
   undo,
   urgent,
   'video-camera-emphasis': videoCameraEmphasis,
+
+  // Office icons
+  word: filesWord,
+  excel: filesExcel,
+  powerpoint: filesPowerPoint,
+  onenote: filesOneNote,
+
+  'word-color': filesWordBrand,
+  'excel-color': filesExcelBrand,
+  'powerpoint-color': filesPowerPointBrand,
+  'onenote-color': filesOneNoteBrand,
 } as { [iconName: string]: TeamsSvgIconSpec }
